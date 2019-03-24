@@ -37,10 +37,10 @@ print("Root password: {}".format(password))
     "import sys, json; result = json.load(sys.stdin)['tunnels'][0]['public_url'].replace('/', '').split(':');\
      print('ssh root@' + result[1] + ' -p ' + result[2]) \
     " 
-    
+```    
  
- 
- ## Google Drive
+## Google Drive
+
 ```shell
 !apt-get install -y -qq software-properties-common python-software-properties module-init-tools
 !add-apt-repository -y ppa:alessandro-strada/ppa 2>&1 > /dev/null
