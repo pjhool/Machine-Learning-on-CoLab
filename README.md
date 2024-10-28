@@ -57,4 +57,54 @@ import getpass
 vcode = getpass.getpass()
 !echo {vcode} | google-drive-ocamlfuse -headless -id={creds.client_id} -secret={creds.client_secret}
 ```
+
+classDiagram
+    class Product {
+        - product_id: String
+        - name: String
+        - description: String
+        - price: Float
+        + get_details(): String
+    }
+
+    class Inventory {
+        - inventory_id: String
+        - product_id: String
+        - quantity: Int
+        + increase(quantity: Int): void
+        + decrease(quantity: Int): void
+    }
+
+    class StockInService {
+        - inventory_repo: InventoryRepository
+        + stock_in(product_id: String, quantity: Int): void
+        + publish_event(event: ProductStockedIn): void
+    }
+
+    class StockOutService {
+        - inventory_repo: InventoryRepository
+        + stock_out(product_id: String, quantity: Int): void
+        + publish_event(event: ProductStockedOut): void
+    }
+
+    class InventoryAuditService {
+        + audit_inventory(): void
+    }
+
+    class ProductStockedIn {
+        - product_id: String
+        - quantity: Int
+    }
+
+    class ProductStockedOut {
+        - product_id: String
+        - quantity: Int
+    }
+
+    Product "1" -- "*" Inventory : 관리
+    Inventory "1" -- "*" StockInService : 입고
+    Inventory "1" -- "*" StockOutService : 출고
+    Inventory "1" -- "*" InventoryAuditService : 감사
+    StockInService --> ProductStockedIn : 발행
+    StockOutService --> ProductStockedOut : 발행
     
